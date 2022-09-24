@@ -1,16 +1,27 @@
 import discord
 from discord.ext import commands
+import json
 
-class MyBot(commands.Bot):
+with open("./config.json") as config_file:
+    data=json.load(config_file)
 
-    def __init__(self):
-        super().__init__(
-            command_prefix = '$',
-            application_id= 1023134462055301161)
+token = data["token"]
 
-    async def on_ready(self):
-        print(f'{self.user} has connected to Discord!')
+description = "hi im a bot"
 
-bot = MyBot()
+intents=discord.Intents.all()
 
-bot.run("MTAyMzEzNDQ2MjA1NTMwMTE2MQ.GssBos.qMOcjbOkyTPhggmqfuSr93dCTB4_O-YWdhxPo4")
+bot = discord.Bot(command_prefix=commands.when_mentioned_or("$"), description=description, intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f"{bot.user.name} is ready")
+
+#command ping with name as input
+@bot.slash_command()
+async def ping(ctx, name):
+    await ctx.respond(f"Pong! Our bots ping is {bot.latency} seconds, your name is {name}")
+
+
+
+bot.run(token)
