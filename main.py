@@ -2,6 +2,14 @@ import discord
 from discord.ext import commands
 import json
 import requests
+import asyncio
+import pymongo
+from datetime import date
+
+client = pymongo.MongoClient("mongodb+srv://silva:Thisisapassword123@cluster0.fdnupvv.mongodb.net/?retryWrites=true&w=majority")
+db = client.journalEntries
+
+print(db)
 
 #open settings
 with open("./config.json") as config_file:
@@ -39,6 +47,21 @@ async def ping(ctx, name):
 async def quote(ctx):
     quote = get_quote()
     await ctx.respond(quote)
+
+#journal command
+@bot.slash_command()
+async def journal(ctx, message):
+    today = str(date.today())
+    db.journalMessages.insert_one(
+        {
+            "message": message,
+            "author": ctx.author.id,
+            "date": today,
+        }
+    )
+
+
+    await ctx.respond('Your message has been journaled')
 
 
 #start the bot with the token
