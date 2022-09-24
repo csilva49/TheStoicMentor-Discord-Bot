@@ -73,15 +73,30 @@ async def myjournal(ctx):
     #this makes the db look for any key entry in author which the author id, basically a select * where author=authorid
     key = {'author': author}
 
+
     #because there might be more than 1 entry, for loop to print all messages
     responseMessages = []
+    responseMessagesDate = []
+    str = ""
+    strDate = ""
     for m in db.journalMessages.find(key):
         responseMessages.append(m['message'])
-        #print (m['message']) debugging
-        await ctx.respond(responseMessages)
 
-    #notify the user that the messages were found
-    #await ctx.respond('Messages found')
+    for d in db.journalMessages.find(key):
+        responseMessagesDate.append(m['date'])
+    
+    for msg in responseMessages:
+        str += msg + '\n\n'
+
+    for msgDate in responseMessagesDate:
+        strDate += msgDate
+        
+    #print (m['message']) debugging
+    if str != "":
+        await ctx.respond('Your journal entries are:\n\n' + str)
+    else:
+        await ctx.respond('Your journal is empty!')
+
 
 
 #start the bot with the token
