@@ -6,6 +6,7 @@ import asyncio
 import pymongo
 from datetime import date
 
+#mongodb config
 client = pymongo.MongoClient("mongodb+srv://silva:Thisisapassword123@cluster0.fdnupvv.mongodb.net/?retryWrites=true&w=majority")
 db = client.journalEntries
 
@@ -52,6 +53,7 @@ async def quote(ctx):
 @bot.slash_command()
 async def journal(ctx, message):
     today = str(date.today())
+    #HOW TO INSERT INTO MONGODB
     db.journalMessages.insert_one(
         {
             "message": message,
@@ -59,9 +61,27 @@ async def journal(ctx, message):
             "date": today,
         }
     )
+    #notify the user that their message was uploaded to the db
+    await ctx.respond('Your message has been journaled.')
 
 
-    await ctx.respond('Your message has been journaled')
+#myjournal command
+@bot.slash_command()
+async def myjournal(ctx):
+    #get users id
+    author = ctx.author.id
+    #this makes the db look for any key entry in author which the author id, basically a select * where author=authorid
+    key = {'author': author}
+
+    #because there might be more than 1 entry, for loop to print all messages
+    responseMessages = []
+    for m in db.journalMessages.find(key):
+        responseMessages.append(m['message'])
+        #print (m['message']) debugging
+        await ctx.respond(responseMessages)
+
+    #notify the user that the messages were found
+    #await ctx.respond('Messages found')
 
 
 #start the bot with the token
