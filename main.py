@@ -4,7 +4,8 @@ import json
 import requests
 import asyncio
 import pymongo
-from datetime import date
+import time
+import datetime
 
 #mongodb config
 client = pymongo.MongoClient("mongodb+srv://silva:Thisisapassword123@cluster0.fdnupvv.mongodb.net/?retryWrites=true&w=majority")
@@ -38,21 +39,16 @@ def get_quote():
 async def on_ready():
     print(f"{bot.user.name} is ready")
 
-#command ping with name as input
-@bot.slash_command()
-async def ping(ctx, name):
-    await ctx.respond(f"Pong! Our bots ping is {bot.latency} seconds, your name is {name}")
-
 #quote command
-@bot.slash_command()
+@bot.slash_command(description="Get shown a random Stoic quote!")
 async def quote(ctx):
     quote = get_quote()
     await ctx.respond(quote)
 
 #journal command
-@bot.slash_command()
+@bot.slash_command(description="Add an entry to your journal")
 async def journal(ctx, message):
-    today = str(date.today())
+    today = str(time.strftime("%d-%m-%Y")) 
     #HOW TO INSERT INTO MONGODB
     db.journalMessages.insert_one(
         {
@@ -62,11 +58,11 @@ async def journal(ctx, message):
         }
     )
     #notify the user that their message was uploaded to the db
-    await ctx.respond('Your message has been journaled.')
+    await ctx.respond('Your message has been journaled.', ephemeral=True)
 
 
 #myjournal command
-@bot.slash_command()
+@bot.slash_command(description="Shows all your journal entries")
 async def myjournal(ctx):
     #get users id
     author = ctx.author.id
@@ -93,9 +89,43 @@ async def myjournal(ctx):
         
     #print (m['message']) debugging
     if str != "":
-        await ctx.respond('Your journal entries are:\n\n' + str)
+        text1 = 'Your journal entries are:\n\n' + str
+        await ctx.respond(text1, ephemeral=True)
     else:
-        await ctx.respond('Your journal is empty!')
+        text2 = 'Your journal is empty!'
+        await ctx.respond(text2, ephemeral=True)
+
+
+#myjournaldate command
+@bot.slash_command(description="Date in dd-mm-YYYY, filter journal by date")
+async def myjournaldate(ctx, date):
+    format = "%d-%m-%Y"
+    try:
+        datetime.datetime.strptime(date, format)
+        #get users id
+        author = ctx.author.id
+        #this makes the db look for any key entry in author which the author id, basically a select * where author=authorid
+        key = {
+            'author': author,
+            'date': date, }
+
+        #because there might be more than 1 entry, for loop to print all messages
+        responseMessagesDate = []
+        str = ""
+        for m in db.journalMessages.find(key):
+            responseMessagesDate.append(m['message'])
+    
+        for msgDate in responseMessagesDate:
+            str += msgDate + '\n\n'\
+            
+        #print (m['message']) debugging
+        if str != "":
+            await ctx.respond('Your journal entries  for ' + date + ' are:\n\n' + str, ephemeral=True)
+        else:
+            await ctx.respond('You haven\'t journaled this day!', ephemeral=True)
+    except:
+        await ctx.respond('The correct date syntax is dd-mm-YYYY!', ephemeral=True)
+    
 
 
 
