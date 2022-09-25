@@ -8,7 +8,7 @@ import time
 import datetime
 
 #mongodb config
-client = pymongo.MongoClient("mongodb+srv://silva:Thisisapassword123@cluster0.fdnupvv.mongodb.net/?retryWrites=true&w=majority")
+client = connection string here
 db = client.journalEntries
 
 print(db)
