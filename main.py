@@ -9,7 +9,7 @@ import time
 import datetime
 
 #mongodb config
-client = pymongo.MongoClient("mongodb+srv://silva:Thisisapassword123@cluster0.fdnupvv.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb_connection_string")
 db = client.journalEntries
 
 print(db)
