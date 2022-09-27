@@ -1,3 +1,4 @@
+from logging import exception
 import discord
 from discord.ext import commands
 import json
@@ -8,7 +9,7 @@ import time
 import datetime
 
 #mongodb config
-client = connection string here
+client = pymongo.MongoClient("mongodb+srv://silva:Thisisapassword123@cluster0.fdnupvv.mongodb.net/?retryWrites=true&w=majority")
 db = client.journalEntries
 
 print(db)
@@ -39,14 +40,17 @@ def get_quote():
 async def on_ready():
     print(f"{bot.user.name} is ready")
 
+
 #quote command
 @bot.slash_command(description="Get shown a random Stoic quote!")
+@commands.cooldown(1, 60, commands.BucketType.user)
 async def quote(ctx):
     quote = get_quote()
     await ctx.respond(quote)
 
 #journal command
 @bot.slash_command(description="Add an entry to your journal")
+@commands.cooldown(1, 300, commands.BucketType.user)
 async def journal(ctx, message):
     today = str(time.strftime("%d-%m-%Y")) 
     #HOW TO INSERT INTO MONGODB
@@ -63,6 +67,7 @@ async def journal(ctx, message):
 
 #myjournal command
 @bot.slash_command(description="Shows all your journal entries")
+@commands.cooldown(1, 300, commands.BucketType.user)
 async def myjournal(ctx):
     #get users id
     author = ctx.author.id
@@ -98,6 +103,7 @@ async def myjournal(ctx):
 
 #myjournaldate command
 @bot.slash_command(description="Date in dd-mm-YYYY, filter journal by date")
+@commands.cooldown(1, 300, commands.BucketType.user)
 async def myjournaldate(ctx, date):
     format = "%d-%m-%Y"
     try:
@@ -119,14 +125,21 @@ async def myjournaldate(ctx, date):
             str += msgDate + '\n\n'\
             
         #print (m['message']) debugging
-        if str != "":
-            await ctx.respond('Your journal entries  for ' + date + ' are:\n\n' + str, ephemeral=True)
-        else:
-            await ctx.respond('You haven\'t journaled this day!', ephemeral=True)
     except:
         await ctx.respond('The correct date syntax is dd-mm-YYYY!', ephemeral=True)
     
+    if str != "":
+        await ctx.respond('Your journal entries  for ' + date + ' are:\n\n' + str, ephemeral=True)
+    else:
+         await ctx.respond('You haven\'t journaled this day!', ephemeral=True)
 
+#error handler for cooldown
+@bot.event
+async def on_application_command_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.respond(error)
+    else:
+        raise error
 
 
 #start the bot with the token
