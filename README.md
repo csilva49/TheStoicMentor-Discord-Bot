@@ -1,8 +1,8 @@
 # TheStoicMentor-Discord-Bot
 
-Welcome to The Stoic Mentor Bot
+Welcome to The Stoic Mentor Bot. 
 
-INTRODUCTION
+# Introduction
 
 This bot has two main functions, stoic quotes and journaling.
 
@@ -14,3 +14,9 @@ The users can see their entries with the command /myjournal.
 
 The users can also their entries for a specific date with the command /myjournaldate
 
+
+# Setup
+
+If you want to use The Stoic Mentor bot in your own Discord server, feel free to do so by using this URL :
+
+https://discord.com/oauth2/authorize?client_id=1023134462055301161&permissions=8&scope=bot%20applications.commands
