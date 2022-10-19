@@ -22,9 +22,10 @@ with open("./config.json") as config_file:
 token = data["token"]
 description = "hi im a bot"
 intents=discord.Intents.all()
+watchingActivity = discord.Activity(type=discord.ActivityType.watching, name="the universe unfold.")
 
 #bot class
-bot = discord.Bot(command_prefix=commands.when_mentioned_or("$"), description=description, intents=intents)
+bot = discord.Bot(command_prefix=commands.when_mentioned_or("$"), activity = watchingActivity, description=description, intents=intents)
 
 #get quote function
 def get_quote():
