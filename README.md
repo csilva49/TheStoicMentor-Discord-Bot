@@ -4,7 +4,7 @@ Welcome to The Stoic Mentor Bot. If you love Stoicism, this bot is for you!
 
 # Introduction
 
-This bot has two main functions, stoic quotes and journaling.
+This bot has two main functions, **stoic quotes** and **journaling**.
 
 Stoic quotes - If the user inputs the command /quote, the bot gathers data from an API and shows a random stoic quote!
 
