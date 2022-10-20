@@ -26,6 +26,16 @@ The /journal command:
 
 ![image](https://user-images.githubusercontent.com/113994636/196951300-20b492bf-be28-4533-8f6f-ebbf3aef3398.png)
 
+The /myjournal command :
+
+![image](https://user-images.githubusercontent.com/113994636/196951512-639a2807-6ffe-442a-a316-56d2ffca668d.png)
+
+The /myjournaldate command :
+
+![image](https://user-images.githubusercontent.com/113994636/196951688-ec22ef1a-b039-4915-941d-a8c588bd5df5.png)
+
+![image](https://user-images.githubusercontent.com/113994636/196951758-b028f7d7-7560-4c34-ac6d-857d1ad2a4f7.png)
+
 
 
 # Setup
