@@ -38,7 +38,7 @@ def get_quote():
     response = requests.get('https://stoic-server.herokuapp.com/random')
     json_data = json.loads(response.text)
 
-    quote = json_data[0]['body'] + ' - ' + json_data[0]['author']
+    quote = json_data[0]['body'] + '\n \n- ' + json_data[0]['author']
 
     return quote
 
