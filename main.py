@@ -113,7 +113,7 @@ async def myjournal(ctx):
 
 # myjournaldate command
 @bot.slash_command(description="Date in dd-mm-YYYY, filter journal by date")
-@commands.cooldown(1, 300, commands.BucketType.user)
+@commands.cooldown(1, 60, commands.BucketType.user)
 async def myjournaldate(ctx, date):
     format = "%d-%m-%Y"
     try:
