@@ -143,9 +143,16 @@ async def myjournaldate(ctx, date):
     else:
         await ctx.respond('You haven\'t journaled this day!', ephemeral=True)
 
+# help command
+
+
+@bot.slash_command(description="Manual on how to use this bot")
+@commands.cooldown(1, 300, commands.BucketType.user)
+async def help(ctx):
+    ctx.respond("This bot has two main functions, stoic quotes and journaling.\n\nStoic quotes - If the user inputs the command /quote, the bot gathers data from an API and shows a random stoic quote!\n\nJournaling - Using the /journal command, the user can input a private message to their personal journal. This journal is stored inside a database.\n\nThe users can see their entries with the command /myjournal.\n\nThe users can also their entries for a specific date with the command /myjournaldate")
+
+
 # error handler for cooldown
-
-
 @bot.event
 async def on_application_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
